@@ -1,0 +1,108 @@
+/* Custom Scrollbar Keren */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #050505; }
+::-webkit-scrollbar-thumb { 
+    background: linear-gradient(to bottom, #00f2fe, #b026ff); 
+    border-radius: 10px; 
+}
+
+/* Background Orb Cahaya */
+.bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.3;
+}
+.orb-blue {
+    top: -10%; left: -10%;
+    width: 600px; height: 600px;
+    background: #00f2fe;
+}
+.orb-purple {
+    bottom: -10%; right: -10%;
+    width: 600px; height: 600px;
+    background: #b026ff;
+}
+
+/* Efek Kaca (Glassmorphism) */
+.glass-nav {
+    background: rgba(5, 5, 5, 0.7);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.skill-badge {
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+.skill-badge:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Card Experience & Image Hover Effects */
+.exp-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+.exp-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(176, 38, 255, 0.4);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(176, 38, 255, 0.1);
+}
+
+.card-img-wrapper {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+}
+.card-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+.exp-card:hover .card-img-wrapper img {
+    transform: scale(1.1);
+}
+
+.card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    backdrop-filter: blur(2px);
+}
+.exp-card:hover .card-overlay {
+    opacity: 1;
+}
+.card-overlay i {
+    transform: scale(0.5);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.exp-card:hover .card-overlay i {
+    transform: scale(1);
+}
+
+/* Modal Animation Styles */
+.modal-active #modal-content-box {
+    transform: scale(1);
+    opacity: 1;
+}

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Muh. Iqra Ramadhan H.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: { brandBlue: '#00d2ff', brandPurple: '#9d4edd', darkBg: '#050505' }
+                }
+            }
+        }
+    </script>
+    <style>
+
+
+body {
+        background: radial-gradient(circle at 0% 0%, #1e1b4b 0%, #050505 50%), 
+                        radial-gradient(circle at 100% 100%, #4c1d95 0%, #050505 50%);
+            background-attachment: fixed;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .text-gradient { background: linear-gradient(to right, #00d2ff, #9d4edd); -webkit-background-clip: text; color: transparent; }
+        .card-project { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        .card-project:hover { transform: translateY(-10px); border-color: #00d2ff; box-shadow: 0 0 30px rgba(0, 210, 255, 0.2); }
+        
+        /* Modal Expand Animation */
+        #project-modal { transition: opacity 0.4s ease; }
+        #modal-box { transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform: scale(0.9); }
+        .modal-open #modal-box { transform: scale(1); }
+        
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(#00d2ff, #9d4edd); border-radius: 10px; }
+
+
+        /* Canvas untuk Efek Asap */
+        #smoke-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Header Bold */
+        .header-glow {
+            background: rgba(15, 15, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid rgba(157, 78, 221, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 210, 255, 0.1);
+        }
+
+        /* Project Expansion Logic */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            transition: all 0.5s ease;
+        }
+
+        .project-card {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            height: 400px;
+        }
+
+        .project-card.expanded {
+            grid-column: span 2;
+            height: 500px;
+        }
+
+        .details-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .project-card.expanded .details-content {
+            display: block;
+            opacity: 1;
+        }
+
+        .project-card.expanded .img-main {
+            width: 40%;
+        }
+
+        /* Custom UI */
+        .glass { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .text-gradient { background: linear-gradient(to right, #00d2ff, #9d4edd); -webkit-background-clip: text; color: transparent; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <canvas id="smoke-canvas"></canvas>
+
+        <nav class="fixed w-full z-50 py-6 px-6">
+                <div class="max-w-6xl mx-auto glass rounded-2xl px-8 py-3 flex justify-between items-center">
+                    <h1 class="font-black text-xl tracking-tighter italic">STUDIO SHODWE<span class="text-brandBlue">.</span></h1>
+                    <div class="hidden md:flex gap-8 text-[10px] font-bold uppercase tracking-widest text-zinc-400">
+                        <a href="#profil" class="hover:text-white transition">About</a>
+                        <a href="#pendidikan" class="hover:text-white transition">Education</a>
+                        <a href="#projek" class="hover:text-white transition">Projects</a>
+                        <a href="#skill" class="hover:text-white transition">Skills</a>
+                        <a href="#kontak" class="hover:text-white transition">Contact</a>
+                    </div>
+                </div>
+            </nav>
+
+    <section id="about" class="min-h-screen flex items-center pt-32 px-10 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-10">
+            <div>
+                <h2 class="text-8xl lg:text-9xl font-black opacity-5 absolute -top-20 -left-10 pointer-events-none uppercase italic">PROFILE</h2>
+                <p class="text-brandBlue font-mono text-xs uppercase tracking-[0.5em] mb-6">Informasi Akademik & Profil</p>
+                <h3 class="text-6xl font-black mb-8 leading-none italic uppercase tracking-tighter">
+                    LULUSAN <span class="text-gradient">CUMLAUDE</span> <br> IPK 3.86
+                </h3>
+                <div class="w-24 h-2 bg-brandPurple mb-10"></div>
+                <p class="text-zinc-400 text-xl leading-relaxed mb-10 font-light max-w-xl">
+                    Seorang **Sarjana Teknik Informatika** [cite: 47, 105] dengan jiwa seni tinggi. Memadukan keahlian **Robotik, Machine Learning, dan Web Development**  untuk menciptakan solusi digital yang efisien dan inovatif[cite: 7, 83]. Saat ini sedang menempuh studi **Magister Informatika**.
+                </p>
+                <div class="flex gap-6">
+                    <div class="glass p-6 rounded-3xl text-center w-40">
+                        <i class="fa-solid fa-graduation-cap text-brandBlue text-2xl mb-3"></i>
+                        <p class="text-[10px] uppercase font-bold tracking-widest">Web Developer</p>
+                    </div>
+                    <div class="glass p-6 rounded-3xl text-center w-40">
+                        <i class="fa-solid fa-microchip text-brandPurple text-2xl mb-3"></i>
+                        <p class="text-[10px] uppercase font-bold tracking-widest">Robotik & IoT Expert</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-center">
+                <div class="relative w-[400px] h-[500px] rounded-[4rem] overflow-hidden border-4 border-white/5 shadow-2xl group bg-white/5">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brandPurple/40 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 z-10 pointer-events-none"></div>
+                    
+                    <img src="foto.png" 
+                        class="w-full h-full object-contain grayscale group-hover:grayscale-0 transition duration-700 relative z-0" 
+                        alt="Muh. Iqra Ramadhan H.">
+                    </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pendidikan" class="py-24 px-6 bg-black/20">
+        <div class="max-w-6xl mx-auto">
+            <h3 class="text-4xl font-black mb-16 italic uppercase tracking-tighter">Academic <span class="text-brandPurple">Journey</span></h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass p-8 rounded-[2rem] border-brandBlue/20">
+                    <h4 class="text-brandBlue font-mono text-xs uppercase tracking-widest mb-2">Bachelor Degree</h4>
+                    <p class="text-2xl font-bold mb-4">Universitas Dipa Makassar</p>
+                    <ul class="text-zinc-400 text-sm space-y-2">
+                        <li><i class="fa-solid fa-check text-brandBlue mr-2"></i> Sarjana Teknik Informatika</li>
+                        <li><i class="fa-solid fa-check text-brandBlue mr-2"></i> IPK: 3,86 / 4,00 (Cumlaude)</li>
+                        <li><i class="fa-solid fa-check text-brandBlue mr-2"></i> Periode: 2021 - Maret 2025</li>
+                    </ul>
+                </div>
+                <div class="glass p-8 rounded-[2rem] border-brandPurple/20">
+                    <h4 class="text-brandPurple font-mono text-xs uppercase tracking-widest mb-2">Master Degree</h4>
+                    <p class="text-2xl font-bold mb-4">Magister Informatika</p>
+                    <ul class="text-zinc-400 text-sm space-y-2">
+                        <li><i class="fa-solid fa-check text-brandPurple mr-2"></i> Fokus: AI & Data Science</li>
+                        <li><i class="fa-solid fa-check text-brandPurple mr-2"></i> Pemrograman Web & Mobile</li>
+                        <li><i class="fa-solid fa-check text-brandPurple mr-2"></i> Periode: Agustus 2025 - Saat Ini</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="py-32 px-10 bg-[#080808]">
+        <div class="max-w-7xl mx-auto">
+            <h3 class="text-4xl font-black mb-20 italic uppercase tracking-tighter">PROJECT <span class="text-brandBlue">SHOWCASE</span></h3>
+            
+            <div class="project-grid" id="project-container">
+
+                <div class="project-card glass rounded-[3rem] p-4 flex flex-col md:flex-row gap-8" onclick="expandProject(this)">
+                    <div class="img-main w-full h-full rounded-[2.5rem] overflow-hidden flex-shrink-0 transition-all duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent p-8 flex flex-col justify-end group-[.expanded]:opacity-0 transition-opacity duration-500">
+                            <span class="text-brandBlue font-mono text-[10px] tracking-widest uppercase mb-2">Featured Project</span>
+                            <h4 class="text-2xl font-black italic uppercase tracking-tighter text-white">Sistem Inventaris ATIM</h4>
+                        </div>
+                        <img src=atim.png class="w-full h-full object-cover">
+                    </div>
+                    <div class="details-content flex-1 py-8 pr-8">
+                        <span class="text-brandPurple font-mono text-[10px] tracking-widest uppercase">Politeknik ATI Makassar</span>
+                        <h4 class="text-4xl font-black mt-4 mb-6 italic uppercase tracking-tighter">SIM Inventasris ATIM</h4>
+                        <p class="text-zinc-400 text-lg leading-relaxed mb-8">
+                            Membangun solusi inventaris berbasis web untuk Politeknik ATI Makassar yang mengintegrasikan sistem basis data terpusat guna meminimalisir kesalahan manusia dalam pengelolaan sarana dan prasarana kampus.
+                        </p>
+                        <div class="flex gap-4">
+                            <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandBlue/30">MANAGEMENT</span>
+                            <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandPurple/30">ACADEMIC</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card glass rounded-[3rem] p-4 flex flex-col md:flex-row gap-8" onclick="expandProject(this)">
+                    <div class="img-main w-full h-full rounded-[2.5rem] overflow-hidden flex-shrink-0 transition-all duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent p-8 flex flex-col justify-end group-[.expanded]:opacity-0 transition-opacity duration-500">
+                            <span class="text-brandBlue font-mono text-[10px] tracking-widest uppercase mb-2">Featured Project</span>
+                            <h4 class="text-2xl font-black italic uppercase tracking-tighter text-white">Sistem Profil Desa Sapanang</h4>
+                        </div>
+                        <img src=desa.png class="w-full h-full object-cover">
+                    </div>
+                    <div class="details-content flex-1 py-8 pr-8">
+                        <span class="text-brandPurple font-mono text-[10px] tracking-widest uppercase">Desa Sapanang</span>
+                        <h4 class="text-4xl font-black mt-4 mb-6 italic uppercase tracking-tighter">SIM Desa Sapanang</h4>
+                        <p class="text-zinc-400 text-lg leading-relaxed mb-8">
+                            Mengembangkan platform profil desa digital untuk Desa Sapanang yang mengintegrasikan pusat informasi publik dan potensi wilayah guna meningkatkan transparansi tata kelola serta memperluas jangkauan promosi sumber daya lokal secara global.
+                        </p>
+                        <div class="flex gap-4">
+                            <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandBlue/30">MANAGEMENT</span>
+                            <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandPurple/30">ACADEMIC</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="project-card glass rounded-[3rem] p-4 flex flex-col md:flex-row gap-8" onclick="expandProject(this)">
+                    <div class="img-main w-full h-full rounded-[2.5rem] overflow-hidden flex-shrink-0 transition-all duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent p-8 flex flex-col justify-end group-[.expanded]:opacity-0 transition-opacity duration-500">
+                            <span class="text-brandBlue font-mono text-[10px] tracking-widest uppercase mb-2">Featured Project</span>
+                            <h4 class="text-2xl font-black italic uppercase tracking-tighter text-white">Sistem Pesantren Nurul Hidayah</h4>
+                        </div>
+                        <img src=pesantren.jpg class="w-full h-full object-cover">
+                    </div>
+                    <div class="details-content flex-1 py-8 pr-8">
+                        <span class="text-brandPurple font-mono text-[10px] tracking-widest uppercase">Nurul Hidayah Sapanang</span>
+                        <h4 class="text-4xl font-black mt-4 mb-6 italic uppercase tracking-tighter">SIM Pesantren Terpadu</h4>
+                        <p class="text-zinc-400 text-lg leading-relaxed mb-8">
+                            Membangun sistem informasi manajemen pesantren terpadu untuk Pondok Pesantren Nurul Hidayah Sapanang yang mengonsolidasikan data akademik, administrasi santri, dan tata kelola keuangan dalam satu basis data guna mewujudkan operasional pendidikan yang lebih akuntabel.
+                        </p>
+                        <div class="flex gap-4">
+                            <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandBlue/30">MANAGEMENT</span>
+                            <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandPurple/30">ACADEMIC</span>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+
+<section class="py-24 bg-black/30 border-y border-white/5">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="mb-20">
+            <h3 class="text-3xl font-black mb-12 italic text-center uppercase tracking-tighter">Technical <span class="text-brandPurple">Capabilities</span></h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div class="p-8 glass rounded-[2rem] border border-white/5 hover:border-brandBlue/50 transition-all duration-300 group">
+                    <i class="fa-solid fa-code text-brandBlue text-3xl mb-4 group-hover:scale-110 transition"></i>
+                    <p class="text-xs font-bold uppercase tracking-widest text-zinc-300">Web Programming</p>
+                    <p class="text-[9px] text-zinc-500 mt-2">HTML, CSS, JS, PHP [cite: 53]</p>
+                </div>
+                <div class="p-8 glass rounded-[2rem] border border-white/5 hover:border-brandPurple/50 transition-all duration-300 group">
+                    <i class="fa-brands fa-python text-brandPurple text-3xl mb-4 group-hover:scale-110 transition"></i>
+                    <p class="text-xs font-bold uppercase tracking-widest text-zinc-300">ML & Data Science</p>
+                    <p class="text-[9px] text-zinc-500 mt-2">Python & AI [cite: 54, 55]</p>
+                </div>
+                <div class="p-8 glass rounded-[2rem] border border-white/5 hover:border-brandBlue/50 transition-all duration-300 group">
+                    <i class="fa-solid fa-robot text-brandBlue text-3xl mb-4 group-hover:scale-110 transition"></i>
+                    <p class="text-xs font-bold uppercase tracking-widest text-zinc-300">Robotics & IoT</p>
+                    <p class="text-[9px] text-zinc-500 mt-2">Mikrokontroler [cite: 52]</p>
+                </div>
+                <div class="p-8 glass rounded-[2rem] border border-white/5 hover:border-brandPurple/50 transition-all duration-300 group">
+                    <i class="fa-solid fa-pen-nib text-brandPurple text-3xl mb-4 group-hover:scale-110 transition"></i>
+                    <p class="text-xs font-bold uppercase tracking-widest text-zinc-300">UI/UX Design</p>
+                    <p class="text-[9px] text-zinc-500 mt-2">Canva & Visual [cite: 56, 60]</p>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h3 class="text-3xl font-black mb-12 italic text-center uppercase tracking-tighter text-brandBlue">Personal Stats</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="glass p-8 rounded-[2rem] border border-white/5 hover:bg-white/5 transition">
+                    <div class="flex justify-between items-center mb-4">
+                        <p class="text-zinc-300 text-xs uppercase tracking-widest font-mono italic font-bold">Creativity</p>
+                        <span class="text-brandBlue text-[10px] font-bold">95%</span>
+                    </div>
+                    <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                        <div class="w-[95%] h-full bg-gradient-to-r from-brandBlue to-brandPurple"></div>
+                    </div>
+                    <p class="text-[9px] text-zinc-500 mt-3 uppercase italic leading-loose">Memadukan kemampuan teknis, analisis, dan desain untuk solusi digital inovatif[cite: 83].</p>
+                </div>
+                
+                <div class="glass p-8 rounded-[2rem] border border-white/5 hover:bg-white/5 transition">
+                    <div class="flex justify-between items-center mb-4">
+                        <p class="text-zinc-300 text-xs uppercase tracking-widest font-mono italic font-bold">Problem Solving</p>
+                        <span class="text-brandPurple text-[10px] font-bold">90%</span>
+                    </div>
+                    <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                        <div class="w-[90%] h-full bg-gradient-to-r from-brandPurple to-brandBlue"></div>
+                    </div>
+                    <p class="text-[9px] text-zinc-500 mt-3 uppercase italic leading-loose">Terbiasa bekerja mandiri maupun dalam tim dengan semangat belajar tinggi[cite: 84].</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <footer id="kontak" class="py-24 px-6 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h3 class="text-5xl font-black mb-8 italic uppercase tracking-tighter">Say <span class="text-brandBlue">Hello.</span></h3>
+            <p class="text-zinc-400 mb-12">"Saya terbuka untuk peluang kerja, kolaborasi, dan pengembangan proyek teknologi."</p>
+            <div class="flex flex-wrap justify-center gap-8 text-sm font-mono">
+                <a href="mailto:miqrarh41@gmail.com" class="hover:text-brandBlue transition">miqrarh41@gmail.com</a>
+                <a href="tel:+6282187054665" class="hover:text-brandPurple transition">+62 821 8705 4665</a>
+                <a href="https://linkedin.com/in/muh-iqra-ramadhan-h-la0257367" target="_blank" class="hover:text-brandBlue transition">LinkedIn</a>
+            </div>
+            <div class="mt-20 text-[8px] uppercase tracking-[0.5em] text-zinc-700">
+                Design & Code by Muh. Iqra Ramadhan Hidayat &copy; 2026
+            </div>
+        </div>
+    </footer>
+
+    <div id="project-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 bg-black/95 backdrop-blur-xl">
+        <div id="modal-box" class="relative glass max-w-5xl w-full rounded-[3rem] overflow-hidden flex flex-col md:flex-row border-white/20 shadow-2xl">
+            <button onclick="closeProject()" class="absolute top-6 right-6 w-12 h-12 glass rounded-full flex items-center justify-center text-white hover:bg-red-500 transition z-10">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="md:w-1/2 h-80 md:h-[600px]">
+                <img id="m-img" src="" class="w-full h-full object-cover">
+            </div>
+            <div class="md:w-1/2 p-12 md:p-16 flex flex-col justify-center">
+                <p id="m-date" class="text-brandBlue font-mono text-[10px] uppercase tracking-[0.5em] mb-6"></p>
+                <h4 id="m-title" class="text-4xl font-black mb-8 leading-none italic uppercase tracking-tighter"></h4>
+                <div class="w-20 h-1 bg-brandPurple mb-10"></div>
+                <p id="m-desc" class="text-zinc-400 text-base leading-relaxed font-light italic"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Script Efek Asap (Mouse Follower)
+        const canvas = document.getElementById('smoke-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 20 + 5;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * -2 - 1;
+                this.color = Math.random() > 0.5 ? 'rgba(157, 78, 221, 0.2)' : 'rgba(0, 210, 255, 0.2)';
+                this.alpha = 1;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.alpha > 0.01) this.alpha -= 0.01;
+            }
+            draw() {
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            for (let i = 0; i < 3; i++) {
+                particles.push(new Particle(e.x, e.y));
+            }
+        });
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].alpha <= 0.01) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // 2. Script Project Expansion
+        function expandProject(card) {
+            const isExpanded = card.classList.contains('expanded');
+            document.querySelectorAll('.project-card').forEach(c => c.classList.remove('expanded'));
+            if (!isExpanded) card.classList.add('expanded');
+        }
+    </script>
+</body>
+</html>
