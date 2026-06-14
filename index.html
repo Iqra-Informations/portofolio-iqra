@@ -75,27 +75,57 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Galeri foto responsif */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        /* Galeri foto - gambar besar + thumbnail */
+        .gallery-container {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .main-image {
+            width: 100%;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: #00000030;
+        }
+        .main-image img {
+            width: 100%;
+            height: auto;
+            max-height: 300px;
+            object-fit: contain;
+            display: block;
+        }
+        .thumbnail-list {
+            display: flex;
             gap: 0.75rem;
-            margin-top: 1rem;
+            flex-wrap: wrap;
         }
-        .gallery-img {
-            aspect-ratio: 1 / 1;
-            object-fit: cover;
-            border-radius: 1rem;
-            transition: all 0.3s ease;
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 0.75rem;
+            overflow: hidden;
             cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 2px solid transparent;
+            transition: all 0.2s;
+            background: #1e1e2a;
         }
-        .gallery-img:hover {
-            transform: scale(1.03);
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .thumbnail.active {
             border-color: #00d2ff;
+            box-shadow: 0 0 8px #00d2ff;
+        }
+        .thumbnail:hover {
+            transform: scale(1.05);
+            border-color: #9d4edd;
         }
 
-        /* Chat AI Modal */
+        /* Chat AI tanpa API Key */
         .chat-modal {
             position: fixed;
             bottom: 1.5rem;
@@ -185,24 +215,6 @@
         .ai-message {
             background: #2d2d3a;
             align-self: flex-start;
-        }
-        .api-key-input {
-            background: rgba(255,255,255,0.05);
-            padding: 0.5rem;
-            font-size: 0.7rem;
-            border-radius: 0.5rem;
-            margin: 0 1rem 0.5rem 1rem;
-            display: flex;
-            gap: 0.5rem;
-        }
-        .api-key-input input {
-            flex: 1;
-            background: #1e1e2a;
-            border: 1px solid #3f3f55;
-            border-radius: 0.5rem;
-            padding: 0.3rem 0.5rem;
-            color: white;
-            font-size: 0.7rem;
         }
     </style>
 </head>
@@ -294,73 +306,82 @@
                             <span class="text-brandBlue font-mono text-[10px] tracking-widest uppercase mb-2">Featured Project</span>
                             <h4 class="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-white">Sistem Inventaris Lab</h4>
                         </div>
-                        <img src="atim.png" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <img src="https://picsum.photos/id/20/800/600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="main inventaris">
                     </div>
                     <div class="details-content flex-1 py-4 md:py-8 md:pr-8 md:border-l border-white/10 md:pl-8">
                         <span class="text-brandPurple font-mono text-[10px] tracking-widest uppercase">Politeknik ATI Makassar</span>
                         <h4 class="text-3xl md:text-4xl font-black mt-4 mb-4 italic uppercase tracking-tighter text-gradient">SIM Inventaris Lab</h4>
                         <div class="w-16 h-1 bg-brandBlue mb-6 rounded-full"></div>
-                        <p class="text-zinc-400 text-sm md:text-base leading-relaxed mb-8 italic">
-                            Membangun solusi inventaris berbasis web untuk Politeknik ATI Makassar yang mengintegrasikan sistem basis data terpusat guna meminimalisir kesalahan manusia dalam pengelolaan sarana dan prasarana kampus.
+                        <p class="text-zinc-400 text-sm md:text-base leading-relaxed mb-6 italic">
+                            Sistem informasi manajemen inventaris laboratorium berbasis web yang terintegrasi dengan database terpusat. Fitur utama: pelacakan barang, peminjaman, pengembalian, dan laporan otomatis. Dibangun dengan Laravel dan MySQL, sistem ini berhasil mengurangi kesalahan pencatatan manual hingga 80% di lingkungan akademik.
                         </p>
                         <div class="flex flex-wrap gap-4 mb-6">
                             <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandBlue/30 text-brandBlue uppercase">Management</span>
                             <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandPurple/30 text-brandPurple uppercase">Academic</span>
                         </div>
-                        <!-- Galeri foto -->
-                        <div class="gallery-grid" data-gallery='["https://picsum.photos/id/20/400/400", "https://picsum.photos/id/26/400/400", "https://picsum.photos/id/28/400/400"]'></div>
+                        <!-- Galeri interaktif -->
+                        <div class="gallery-container" data-gallery='["https://picsum.photos/id/20/800/600", "https://picsum.photos/id/26/800/600", "https://picsum.photos/id/28/800/600"]'>
+                            <div class="main-image"><img src="https://picsum.photos/id/20/800/600" alt="main"></div>
+                            <div class="thumbnail-list"></div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- PROYEK 2: SIM Profil Desa (sudah ada + galeri) -->
+                <!-- PROYEK 2: SIM Profil Desa -->
                 <div class="project-card glass rounded-[3rem] p-4 flex flex-col md:flex-row gap-6 md:gap-8 group" onclick="expandProject(this)">
                     <div class="img-main w-full h-64 md:h-full rounded-[2.5rem] overflow-hidden flex-shrink-0 transition-all duration-500 relative">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent p-6 md:p-8 flex flex-col justify-end group-[.expanded]:opacity-0 transition-opacity duration-500">
                             <span class="text-brandPurple font-mono text-[10px] tracking-widest uppercase mb-2">Web Application</span>
                             <h4 class="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-white">SIM Profil Desa</h4>
                         </div>
-                        <img src="desa.PNG" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <img src="https://picsum.photos/id/104/800/600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                     </div>
                     <div class="details-content flex-1 py-4 md:py-8 md:pr-8 md:border-l border-white/10 md:pl-8">
                         <span class="text-brandBlue font-mono text-[10px] tracking-widest uppercase">Desa Sapanang</span>
                         <h4 class="text-3xl md:text-4xl font-black mt-4 mb-4 italic uppercase tracking-tighter text-gradient">Digital Profile</h4>
                         <div class="w-16 h-1 bg-brandPurple mb-6 rounded-full"></div>
-                        <p class="text-zinc-400 text-sm md:text-base leading-relaxed mb-8 italic">
-                            Mengembangkan platform profil desa digital untuk Desa Sapanang yang mengintegrasikan pusat informasi publik dan potensi wilayah guna meningkatkan transparansi tata kelola serta memperluas jangkauan promosi.
+                        <p class="text-zinc-400 text-sm md:text-base leading-relaxed mb-6 italic">
+                            Platform profil desa digital yang menampilkan informasi geografis, potensi wisata, UMKM, dan layanan publik. Dilengkapi dengan peta interaktif dan sistem pengaduan masyarakat. Menggunakan Next.js dan Tailwind CSS, serta deployment di Vercel. Meningkatkan transparansi dan akses informasi warga.
                         </p>
                         <div class="flex flex-wrap gap-4 mb-6">
                             <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandBlue/30 text-brandBlue uppercase">Web Dev</span>
                             <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandPurple/30 text-brandPurple uppercase">Public Service</span>
                         </div>
-                        <div class="gallery-grid" data-gallery='["https://picsum.photos/id/104/400/400", "https://picsum.photos/id/169/400/400", "https://picsum.photos/id/15/400/400"]'></div>
+                        <div class="gallery-container" data-gallery='["https://picsum.photos/id/104/800/600", "https://picsum.photos/id/169/800/600", "https://picsum.photos/id/15/800/600"]'>
+                            <div class="main-image"><img src="https://picsum.photos/id/104/800/600" alt="main"></div>
+                            <div class="thumbnail-list"></div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- PROYEK 3: SIM Pesantren (sudah ada + galeri) -->
+                <!-- PROYEK 3: SIM Pesantren -->
                 <div class="project-card glass rounded-[3rem] p-4 flex flex-col md:flex-row gap-6 md:gap-8 group" onclick="expandProject(this)">
                     <div class="img-main w-full h-64 md:h-full rounded-[2.5rem] overflow-hidden flex-shrink-0 transition-all duration-500 relative">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent p-6 md:p-8 flex flex-col justify-end group-[.expanded]:opacity-0 transition-opacity duration-500">
                             <span class="text-brandBlue font-mono text-[10px] tracking-widest uppercase mb-2">Integrated System</span>
                             <h4 class="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-white">SIM Pesantren</h4>
                         </div>
-                        <img src="pesantren.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <img src="https://picsum.photos/id/30/800/600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                     </div>
                     <div class="details-content flex-1 py-4 md:py-8 md:pr-8 md:border-l border-white/10 md:pl-8">
                         <span class="text-brandPurple font-mono text-[10px] tracking-widest uppercase">Nurul Hidayah Sapanang</span>
                         <h4 class="text-3xl md:text-4xl font-black mt-4 mb-4 italic uppercase tracking-tighter text-gradient">Sistem Terpadu</h4>
                         <div class="w-16 h-1 bg-brandBlue mb-6 rounded-full"></div>
-                        <p class="text-zinc-400 text-sm md:text-base leading-relaxed mb-8 italic">
-                            Membangun sistem informasi manajemen pesantren terpadu untuk Pondok Pesantren Nurul Hidayah Sapanang yang mengonsolidasikan data akademik, administrasi santri, dan tata kelola keuangan dalam satu basis data.
+                        <p class="text-zinc-400 text-sm md:text-base leading-relaxed mb-6 italic">
+                            Sistem informasi manajemen pesantren terpadu yang mengelola data santri, guru, jadwal pelajaran, nilai, dan keuangan. Dibangun dengan PHP Native dan MySQL. Memberikan laporan otomatis untuk wali santri dan administrator. Digunakan oleh lebih dari 200 santri.
                         </p>
                         <div class="flex flex-wrap gap-4 mb-6">
                             <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandBlue/30 text-brandBlue uppercase">Management</span>
                             <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandPurple/30 text-brandPurple uppercase">Academic</span>
                         </div>
-                        <div class="gallery-grid" data-gallery='["https://picsum.photos/id/21/400/400", "https://picsum.photos/id/30/400/400", "https://picsum.photos/id/36/400/400"]'></div>
+                        <div class="gallery-container" data-gallery='["https://picsum.photos/id/30/800/600", "https://picsum.photos/id/36/800/600", "https://picsum.photos/id/21/800/600"]'>
+                            <div class="main-image"><img src="https://picsum.photos/id/30/800/600" alt="main"></div>
+                            <div class="thumbnail-list"></div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- PROYEK BARU 4: APK Petshop (Mobile App) -->
+                <!-- PROYEK 4: APK Petshop (Mobile) -->
                 <div class="project-card glass rounded-[3rem] p-4 flex flex-col md:flex-row gap-6 md:gap-8 group" onclick="expandProject(this)">
                     <div class="img-main w-full h-64 md:h-full rounded-[2.5rem] overflow-hidden flex-shrink-0 transition-all duration-500 relative">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent p-6 md:p-8 flex flex-col justify-end group-[.expanded]:opacity-0 transition-opacity duration-500">
@@ -373,19 +394,22 @@
                         <span class="text-brandBlue font-mono text-[10px] tracking-widest uppercase">Android / iOS</span>
                         <h4 class="text-3xl md:text-4xl font-black mt-4 mb-4 italic uppercase tracking-tighter text-gradient">Petshop Management</h4>
                         <div class="w-16 h-1 bg-brandPurple mb-6 rounded-full"></div>
-                        <p class="text-zinc-400 text-sm md:text-base leading-relaxed mb-8 italic">
-                            Aplikasi mobile untuk manajemen petshop modern: inventaris produk, layanan grooming, pelacakan pelanggan, dan laporan pendapatan real-time. Dibangun dengan Flutter & Firebase.
+                        <p class="text-zinc-400 text-sm md:text-base leading-relaxed mb-6 italic">
+                            Aplikasi mobile untuk manajemen petshop modern. Fitur: inventaris produk, layanan grooming, pelacakan pelanggan, jadwal perawatan hewan, dan laporan pendapatan real-time. Dibangun dengan Flutter (Dart) dan Firebase (Auth, Firestore, Storage). Tersedia untuk Android dan iOS.
                         </p>
                         <div class="flex flex-wrap gap-4 mb-6">
                             <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandBlue/30 text-brandBlue uppercase">Flutter</span>
                             <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandPurple/30 text-brandPurple uppercase">Firebase</span>
                             <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandBlue/30 text-brandBlue uppercase">Mobile</span>
                         </div>
-                        <div class="gallery-grid" data-gallery='["https://picsum.photos/id/200/400/400", "https://picsum.photos/id/219/400/400", "https://picsum.photos/id/300/400/400"]'></div>
+                        <div class="gallery-container" data-gallery='["https://picsum.photos/id/200/800/600", "https://picsum.photos/id/219/800/600", "https://picsum.photos/id/300/800/600"]'>
+                            <div class="main-image"><img src="https://picsum.photos/id/200/800/600" alt="main"></div>
+                            <div class="thumbnail-list"></div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- PROYEK BARU 5: Aplikasi Klinik -->
+                <!-- PROYEK 5: Aplikasi Klinik -->
                 <div class="project-card glass rounded-[3rem] p-4 flex flex-col md:flex-row gap-6 md:gap-8 group" onclick="expandProject(this)">
                     <div class="img-main w-full h-64 md:h-full rounded-[2.5rem] overflow-hidden flex-shrink-0 transition-all duration-500 relative">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent p-6 md:p-8 flex flex-col justify-end group-[.expanded]:opacity-0 transition-opacity duration-500">
@@ -398,14 +422,17 @@
                         <span class="text-brandPurple font-mono text-[10px] tracking-widest uppercase">Sistem Informasi Klinik</span>
                         <h4 class="text-3xl md:text-4xl font-black mt-4 mb-4 italic uppercase tracking-tighter text-gradient">Clinic Management</h4>
                         <div class="w-16 h-1 bg-brandBlue mb-6 rounded-full"></div>
-                        <p class="text-zinc-400 text-sm md:text-base leading-relaxed mb-8 italic">
-                            Platform manajemen klinik kesehatan: pendaftaran pasien, rekam medis digital, antrian online, dan laporan statistik. Dibangun dengan Laravel & MySQL.
+                        <p class="text-zinc-400 text-sm md:text-base leading-relaxed mb-6 italic">
+                            Platform manajemen klinik kesehatan: pendaftaran pasien online, rekam medis digital, antrian real-time, manajemen obat, dan laporan statistik kunjungan. Dibangun dengan Laravel (PHP), MySQL, Bootstrap. Memiliki role admin, dokter, dan apoteker. Digunakan oleh klinik pratama di Makassar.
                         </p>
                         <div class="flex flex-wrap gap-4 mb-6">
                             <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandBlue/30 text-brandBlue uppercase">Laravel</span>
                             <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandPurple/30 text-brandPurple uppercase">Health Tech</span>
                         </div>
-                        <div class="gallery-grid" data-gallery='["https://picsum.photos/id/107/400/400", "https://picsum.photos/id/116/400/400", "https://picsum.photos/id/177/400/400"]'></div>
+                        <div class="gallery-container" data-gallery='["https://picsum.photos/id/48/800/600", "https://picsum.photos/id/107/800/600", "https://picsum.photos/id/116/800/600"]'>
+                            <div class="main-image"><img src="https://picsum.photos/id/48/800/600" alt="main"></div>
+                            <div class="thumbnail-list"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -417,25 +444,25 @@
             <div class="mb-24">
                 <h3 class="text-3xl font-black mb-12 italic text-center uppercase tracking-tighter">Technical <span class="text-brandPurple">Capabilities</span></h3>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                    <div class="p-8 glass rounded-[2rem] border border-white/5 hover:border-brandBlue/50 transition-all duration-300 group">
-                        <i class="fa-solid fa-code text-brandBlue text-3xl mb-4 group-hover:scale-110 transition"></i>
-                        <p class="text-xs font-bold uppercase tracking-widest text-zinc-300">Web Programming</p>
-                        <p class="text-[9px] text-zinc-500 mt-2 font-mono">HTML, CSS, JS, PHP</p>
+                    <div class="p-6 glass rounded-[2rem] border border-white/5 hover:border-brandBlue/50 transition">
+                        <i class="fa-solid fa-database text-brandBlue text-3xl mb-3"></i>
+                        <p class="text-xs font-bold uppercase">Manajemen Data</p>
+                        <p class="text-[9px] text-zinc-400 mt-1">Python (Pandas, NumPy), PostgreSQL, Data Cleaning</p>
                     </div>
-                    <div class="p-8 glass rounded-[2rem] border border-white/5 hover:border-brandPurple/50 transition-all duration-300 group">
-                        <i class="fa-brands fa-python text-brandPurple text-3xl mb-4 group-hover:scale-110 transition"></i>
-                        <p class="text-xs font-bold uppercase tracking-widest text-zinc-300">ML & Data Science</p>
-                        <p class="text-[9px] text-zinc-500 mt-2 font-mono">Python & AI</p>
+                    <div class="p-6 glass rounded-[2rem] border border-white/5 hover:border-brandPurple/50 transition">
+                        <i class="fa-solid fa-code text-brandPurple text-3xl mb-3"></i>
+                        <p class="text-xs font-bold uppercase">Web Development</p>
+                        <p class="text-[9px] text-zinc-400 mt-1">HTML/CSS, Tailwind, JS, PHP, Next.js, Vercel</p>
                     </div>
-                    <div class="p-8 glass rounded-[2rem] border border-white/5 hover:border-brandBlue/50 transition-all duration-300 group">
-                        <i class="fa-solid fa-robot text-brandBlue text-3xl mb-4 group-hover:scale-110 transition"></i>
-                        <p class="text-xs font-bold uppercase tracking-widest text-zinc-300">Robotics & IoT</p>
-                        <p class="text-[9px] text-zinc-500 mt-2 font-mono">Mikrokontroler</p>
+                    <div class="p-6 glass rounded-[2rem] border border-white/5 hover:border-brandBlue/50 transition">
+                        <i class="fa-solid fa-microchip text-brandBlue text-3xl mb-3"></i>
+                        <p class="text-xs font-bold uppercase">IoT & Mikrokontroler</p>
+                        <p class="text-[9px] text-zinc-400 mt-1">ESP32-S3, Arduino, Sensor Integration</p>
                     </div>
-                    <div class="p-8 glass rounded-[2rem] border border-white/5 hover:border-brandPurple/50 transition-all duration-300 group">
-                        <i class="fa-solid fa-pen-nib text-brandPurple text-3xl mb-4 group-hover:scale-110 transition"></i>
-                        <p class="text-xs font-bold uppercase tracking-widest text-zinc-300">UI/UX Design</p>
-                        <p class="text-[9px] text-zinc-500 mt-2 font-mono">Canva & Visual</p>
+                    <div class="p-6 glass rounded-[2rem] border border-white/5 hover:border-brandPurple/50 transition">
+                        <i class="fa-solid fa-headset text-brandPurple text-3xl mb-3"></i>
+                        <p class="text-xs font-bold uppercase">IT Support</p>
+                        <p class="text-[9px] text-zinc-400 mt-1">Troubleshooting HW/SW, Document Control</p>
                     </div>
                 </div>
             </div>
@@ -444,23 +471,23 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     <div class="glass p-8 rounded-[2rem] border border-white/5 hover:bg-white/5 transition">
                         <div class="flex justify-between items-center mb-4">
-                            <p class="text-zinc-300 text-xs uppercase tracking-widest font-mono italic font-bold">Creativity</p>
-                            <span class="text-brandBlue text-[10px] font-bold">95%</span>
+                            <p class="text-zinc-300 text-xs uppercase tracking-widest font-mono italic">Problem Solving</p>
+                            <span class="text-brandBlue text-[10px] font-bold">92%</span>
                         </div>
                         <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                            <div class="w-[95%] h-full bg-gradient-to-r from-brandBlue to-brandPurple"></div>
+                            <div class="w-[92%] h-full bg-gradient-to-r from-brandBlue to-brandPurple"></div>
                         </div>
-                        <p class="text-[10px] text-zinc-500 mt-4 italic leading-relaxed">Memadukan kemampuan teknis, analisis, dan desain untuk solusi digital inovatif.</p>
+                        <p class="text-[10px] text-zinc-500 mt-4 italic">Kemampuan analitis dan pemecahan masalah teknis & non-teknis.</p>
                     </div>
                     <div class="glass p-8 rounded-[2rem] border border-white/5 hover:bg-white/5 transition">
                         <div class="flex justify-between items-center mb-4">
-                            <p class="text-zinc-300 text-xs uppercase tracking-widest font-mono italic font-bold">Problem Solving</p>
-                            <span class="text-brandPurple text-[10px] font-bold">90%</span>
+                            <p class="text-zinc-300 text-xs uppercase tracking-widest font-mono italic">Komunikasi Teknis</p>
+                            <span class="text-brandPurple text-[10px] font-bold">88%</span>
                         </div>
                         <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                            <div class="w-[90%] h-full bg-gradient-to-r from-brandPurple to-brandBlue"></div>
+                            <div class="w-[88%] h-full bg-gradient-to-r from-brandPurple to-brandBlue"></div>
                         </div>
-                        <p class="text-[10px] text-zinc-500 mt-4 italic leading-relaxed">Terbiasa bekerja mandiri maupun dalam tim dengan semangat belajar tinggi.</p>
+                        <p class="text-[10px] text-zinc-500 mt-4 italic">Menyampaikan konsep teknis ke audiens non-teknis dengan efektif.</p>
                     </div>
                 </div>
             </div>
@@ -470,34 +497,33 @@
     <footer id="kontak" class="py-24 px-6 text-center">
         <div class="max-w-4xl mx-auto">
             <h3 class="text-5xl md:text-6xl font-black mb-6 italic uppercase tracking-tighter">Say <span class="text-brandBlue">Hello.</span></h3>
-            <p class="text-zinc-400 mb-12 italic">"Saya terbuka untuk peluang kerja, kolaborasi, dan pengembangan proyek teknologi."</p>
-            <div class="flex flex-wrap justify-center gap-8 text-sm font-mono bg-white/5 inline-flex p-6 rounded-[2rem] border border-white/5">
-                <a href="mailto:miqrarh41@gmail.com" class="hover:text-brandBlue transition flex items-center gap-2"><i class="fa-solid fa-envelope text-brandBlue"></i> miqrarh41@gmail.com</a>
+            <p class="text-zinc-400 mb-8 italic">Makassar, Sulawesi Selatan, Indonesia</p>
+            
+            <div class="flex flex-wrap justify-center gap-6 text-sm font-mono bg-white/5 inline-flex p-6 rounded-[2rem] border border-white/5">
+                <a href="mailto:miqrarh23@gmail.com" class="hover:text-brandBlue transition flex items-center gap-2"><i class="fa-solid fa-envelope text-brandBlue"></i> miqrarh23@gmail.com</a>
                 <a href="tel:+6282187054665" class="hover:text-brandPurple transition flex items-center gap-2"><i class="fa-solid fa-phone text-brandPurple"></i> +62 821 8705 4665</a>
-                <a href="https://www.linkedin.com/in/muh-iqra-ramadhan-h-1a0257367" target="_blank" class="hover:text-brandBlue transition flex items-center gap-2"><i class="fa-brands fa-linkedin text-brandBlue"></i> LinkedIn</a>
+                <a href="https://github.com/Iqra-Informations" target="_blank" class="hover:text-brandBlue transition flex items-center gap-2"><i class="fa-brands fa-github text-brandBlue"></i> GitHub</a>
+                <a href="https://www.instagram.com/muhiqramadhan_/" target="_blank" class="hover:text-brandPurple transition flex items-center gap-2"><i class="fa-brands fa-instagram text-brandPurple"></i> Instagram</a>
             </div>
+            
             <div class="mt-20 text-[10px] font-mono uppercase tracking-[0.3em] text-zinc-600">
                 Design & Code by Muh. Iqra Ramadhan Hidayat &copy; 2026
             </div>
         </div>
     </footer>
 
-    <!-- Chat AI Modal (Gemini API) -->
+    <!-- Chat AI Tanpa API Key (Knowledge-based) -->
     <div class="chat-modal">
         <div class="chat-button" id="chatButton">
             <i class="fa-regular fa-message text-2xl text-white"></i>
         </div>
         <div id="chatWindow" class="chat-window hidden">
             <div class="chat-header">
-                <span><i class="fa-regular fa-comment-dots text-brandBlue"></i> AI Assistant</span>
+                <span><i class="fa-regular fa-comment-dots text-brandBlue"></i> AI Assistant (Portfolio)</span>
                 <i class="fa-solid fa-xmark cursor-pointer" id="closeChat"></i>
             </div>
-            <div class="api-key-input">
-                <input type="text" id="geminiKey" placeholder="Masukkan Gemini API Key (dapatkan di aistudio.google.com)" style="flex:1">
-                <button id="saveKeyBtn" class="text-xs bg-brandPurple px-2 rounded">Simpan</button>
-            </div>
             <div class="chat-messages" id="chatMessages">
-                <div class="message ai-message">Halo! Saya asisten AI. Silakan masukkan API Key Gemini di atas lalu tanyakan apa saja 😊</div>
+                <div class="message ai-message">Halo! Saya asisten virtual dari portofolio Muh. Iqra Ramadhan Hidayat. Tanyakan tentang pendidikan, proyek, skill, atau pengalaman beliau. Apa yang ingin Anda ketahui?</div>
             </div>
             <div class="chat-input-area">
                 <input type="text" id="chatInput" placeholder="Tanyakan sesuatu...">
@@ -507,7 +533,7 @@
     </div>
 
     <script>
-        // 1. Efek Asap
+        // Efek Asap (sama seperti sebelumnya)
         const canvas = document.getElementById('smoke-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -533,58 +559,86 @@
         function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); for (let i = 0; i < particles.length; i++) { particles[i].update(); particles[i].draw(); if (particles[i].alpha <= 0.01) { particles.splice(i,1); i--; } } requestAnimationFrame(animate); }
         animate();
 
-        // 2. Project Expansion (tanpa modal)
+        // Project expansion & galeri interaktif
         function expandProject(clickedCard) {
             const isExpanded = clickedCard.classList.contains('expanded');
-            document.querySelectorAll('.project-card').forEach(card => card.classList.remove('expanded'));
+            document.querySelectorAll('.project-card').forEach(card => {
+                card.classList.remove('expanded');
+                // Reset galeri ke gambar pertama saat proyek ditutup
+                const container = card.querySelector('.gallery-container');
+                if (container && container._resetGallery) container._resetGallery();
+            });
             if (!isExpanded) {
                 clickedCard.classList.add('expanded');
                 setTimeout(() => clickedCard.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
-                // Render galeri setelah expand (jika belum dirender)
-                renderGalleryForCard(clickedCard);
+                // Inisialisasi galeri untuk card yang baru dibuka
+                initGalleryForCard(clickedCard);
             }
         }
 
-        // Fungsi untuk membuat galeri dari data-gallery
-        function renderGalleryForCard(card) {
-            const galleryDiv = card.querySelector('.gallery-grid');
-            if (!galleryDiv || galleryDiv.hasAttribute('data-rendered')) return;
-            const imagesSrc = galleryDiv.getAttribute('data-gallery');
-            if (!imagesSrc) return;
+        function initGalleryForCard(card) {
+            const container = card.querySelector('.gallery-container');
+            if (!container || container.dataset.galleryInitialized === 'true') return;
+            const galleryData = container.getAttribute('data-gallery');
+            if (!galleryData) return;
             try {
-                const images = JSON.parse(imagesSrc);
-                galleryDiv.innerHTML = '';
-                images.forEach(src => {
+                const images = JSON.parse(galleryData);
+                const mainImgDiv = container.querySelector('.main-image img');
+                const thumbnailList = container.querySelector('.thumbnail-list');
+                if (!mainImgDiv || !thumbnailList) return;
+
+                // Bersihkan thumbnail
+                thumbnailList.innerHTML = '';
+                // Set gambar pertama sebagai default
+                mainImgDiv.src = images[0];
+                // Fungsi untuk mengganti gambar besar
+                function setMainImage(src) {
+                    mainImgDiv.src = src;
+                    // Update active class pada thumbnail
+                    document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active'));
+                    const activeThumb = Array.from(thumbnailList.children).find(thumb => thumb.querySelector('img').src === src);
+                    if (activeThumb) activeThumb.classList.add('active');
+                }
+                // Buat thumbnail untuk setiap gambar
+                images.forEach((src, idx) => {
+                    const thumbDiv = document.createElement('div');
+                    thumbDiv.className = 'thumbnail';
+                    if (idx === 0) thumbDiv.classList.add('active');
                     const img = document.createElement('img');
                     img.src = src;
-                    img.className = 'gallery-img';
-                    img.addEventListener('click', (e) => { e.stopPropagation(); window.open(src, '_blank'); });
-                    galleryDiv.appendChild(img);
+                    img.alt = `Thumbnail ${idx+1}`;
+                    thumbDiv.appendChild(img);
+                    thumbDiv.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        setMainImage(src);
+                    });
+                    thumbnailList.appendChild(thumbDiv);
                 });
-                galleryDiv.setAttribute('data-rendered', 'true');
+                // Simpan fungsi reset
+                container._resetGallery = () => {
+                    if (images.length > 0) {
+                        mainImgDiv.src = images[0];
+                        document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active'));
+                        const firstThumb = thumbnailList.querySelector('.thumbnail');
+                        if (firstThumb) firstThumb.classList.add('active');
+                    }
+                };
+                container.dataset.galleryInitialized = 'true';
             } catch(e) { console.warn(e); }
         }
-        // Render galeri untuk semua card yang mungkin sudah ada (pada load)
-        document.querySelectorAll('.project-card').forEach(card => renderGalleryForCard(card));
 
-        // 3. Chat AI dengan Gemini API (butuh API Key)
+        // Saat load, inisialisasi semua galeri (untuk berjaga-jaga)
+        document.querySelectorAll('.project-card').forEach(card => {
+            if (card.classList.contains('expanded')) initGalleryForCard(card);
+        });
+
+        // Chat AI berbasis pengetahuan (tanpa API Key)
         const chatButton = document.getElementById('chatButton');
         const chatWindow = document.getElementById('chatWindow');
         const closeChat = document.getElementById('closeChat');
         const sendBtn = document.getElementById('sendChat');
         const chatInput = document.getElementById('chatInput');
         const chatMessages = document.getElementById('chatMessages');
-        const geminiKeyInput = document.getElementById('geminiKey');
-        const saveKeyBtn = document.getElementById('saveKeyBtn');
-
-        let geminiApiKey = localStorage.getItem('gemini_api_key') || '';
-        if(geminiApiKey) geminiKeyInput.value = geminiApiKey;
-
-        saveKeyBtn.addEventListener('click', () => {
-            geminiApiKey = geminiKeyInput.value.trim();
-            localStorage.setItem('gemini_api_key', geminiApiKey);
-            addMessage('ai', 'API Key tersimpan! Sekarang kamu bisa bertanya.');
-        });
 
         chatButton.addEventListener('click', () => chatWindow.classList.toggle('hidden'));
         closeChat.addEventListener('click', () => chatWindow.classList.add('hidden'));
@@ -597,35 +651,37 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        async function sendToGemini(prompt) {
-            if (!geminiApiKey) {
-                addMessage('ai', '⚠️ Silakan masukkan API Key Gemini terlebih dahulu (dapatkan di aistudio.google.com).');
-                return null;
+        // Knowledge base sederhana
+        function getAIResponse(question) {
+            const q = question.toLowerCase();
+            if (q.includes('siapa') || q.includes('nama') || q.includes('perkenalan')) {
+                return "Saya Muh. Iqra Ramadhan Hidayat, biasa dipanggil Iqra. Saya lulusan Sarjana Teknik Informatika dari Universitas Dipa Makassar (Cumlaude, IPK 3.86), dan saat ini sedang menempuh Magister Informatika. Saya memiliki minat di bidang Web Development, IoT, dan Data Science.";
             }
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`;
-            const body = { contents: [{ parts: [{ text: prompt }] }] };
-            try {
-                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-                const data = await response.json();
-                if (data.error) throw new Error(data.error.message);
-                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Maaf, tidak ada respons.';
-                return reply;
-            } catch (err) {
-                console.error(err);
-                return `Error: ${err.message}. Pastikan API key valid dan kuota mencukupi.`;
+            if (q.includes('pendidikan') || q.includes('kuliah') || q.includes('sekolah')) {
+                return "Pendidikan: S1 Teknik Informatika di Universitas Dipa Makassar (2021-2025, Cumlaude). Saat ini melanjutkan S2 Magister Informatika dengan fokus AI & Data Science, serta Pemrograman Web & Mobile.";
             }
+            if (q.includes('skill') || q.includes('keahlian') || q.includes('bisa')) {
+                return "Keahlian saya meliputi: Web Development (HTML/CSS, Tailwind, JS, PHP, Next.js), Manajemen Data (Python, Pandas, PostgreSQL), IoT & Mikrokontroler (ESP32, Arduino), serta IT Support. Saya juga memiliki kemampuan komunikasi teknis dan problem solving.";
+            }
+            if (q.includes('proyek') || q.includes('project') || q.includes('portofolio')) {
+                return "Beberapa proyek unggulan: SIM Inventaris Lab, SIM Profil Desa Sapanang, SIM Pesantren Nurul Hidayah, APK Petshop (Flutter), dan Aplikasi Manajemen Klinik. Detail lengkapnya ada di bagian Projects pada portofolio ini.";
+            }
+            if (q.includes('kontak') || q.includes('email') || q.includes('wa') || q.includes('telepon') || q.includes('instagram') || q.includes('github')) {
+                return "Anda bisa menghubungi saya melalui email: miqrarh23@gmail.com, WhatsApp: +62 821 8705 4665, Instagram: @muhiqramadhan_, GitHub: Iqra-Informations, atau langsung mengunjungi footer halaman ini.";
+            }
+            if (q.includes('pengalaman') || q.includes('kerja')) {
+                return "Selama kuliah, saya aktif mengerjakan proyek freelance dan kolaborasi dengan instansi seperti Politeknik ATI Makassar, Desa Sapanang, dan Pondok Pesantren Nurul Hidayah. Saya juga berpengalaman dalam IT support dan pengembangan sistem informasi.";
+            }
+            return "Maaf, saya belum mengerti pertanyaan itu. Coba tanyakan tentang: profil, pendidikan, keahlian, proyek, kontak, atau pengalaman saya. Atau Anda bisa melihat langsung di website portofolio saya.";
         }
 
-        sendBtn.addEventListener('click', async () => {
+        sendBtn.addEventListener('click', () => {
             const question = chatInput.value.trim();
             if (!question) return;
             addMessage('user', question);
             chatInput.value = '';
-            addMessage('ai', '⏳ Mengetik...');
-            const lastMsg = chatMessages.lastChild;
-            const reply = await sendToGemini(question);
-            lastMsg.remove();
-            addMessage('ai', reply);
+            const reply = getAIResponse(question);
+            setTimeout(() => addMessage('ai', reply), 300);
         });
         chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendBtn.click(); });
     </script>
