@@ -33,14 +33,11 @@
         .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
         .text-gradient { background: linear-gradient(to right, #00d2ff, #9d4edd); -webkit-background-clip: text; color: transparent; }
         
-        /* Canvas Efek Asap */
         #smoke-canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background: linear-gradient(#00d2ff, #9d4edd); border-radius: 10px; }
 
-        /* Logika Project Melebar (Bukan Pop-up) */
         .project-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -59,7 +56,6 @@
         }
         .project-card:hover { border-color: rgba(0, 210, 255, 0.5); box-shadow: 0 10px 30px rgba(157, 78, 221, 0.2); }
 
-        /* Saat di-klik (Expanded) */
         .project-card.expanded {
             height: auto;
             min-height: 450px;
@@ -77,6 +73,136 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Galeri foto responsif */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .gallery-img {
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .gallery-img:hover {
+            transform: scale(1.03);
+            border-color: #00d2ff;
+        }
+
+        /* Chat AI Modal */
+        .chat-modal {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 10000;
+        }
+        .chat-button {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #00d2ff, #9d4edd);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+        }
+        .chat-button:hover { transform: scale(1.05); }
+        .chat-window {
+            position: fixed;
+            bottom: 80px;
+            right: 1.5rem;
+            width: 350px;
+            height: 500px;
+            background: #0f0f1a;
+            border-radius: 1.5rem;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0,210,255,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 25px 40px -12px black;
+            transition: all 0.3s ease;
+        }
+        .chat-window.hidden { display: none; }
+        .chat-header {
+            background: rgba(0,0,0,0.6);
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .chat-input-area {
+            padding: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            gap: 0.5rem;
+        }
+        .chat-input-area input {
+            flex: 1;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 2rem;
+            padding: 0.5rem 1rem;
+            color: white;
+            outline: none;
+        }
+        .chat-input-area button {
+            background: #00d2ff;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .message {
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            max-width: 85%;
+            font-size: 0.85rem;
+        }
+        .user-message {
+            background: #00d2ff;
+            align-self: flex-end;
+            color: black;
+        }
+        .ai-message {
+            background: #2d2d3a;
+            align-self: flex-start;
+        }
+        .api-key-input {
+            background: rgba(255,255,255,0.05);
+            padding: 0.5rem;
+            font-size: 0.7rem;
+            border-radius: 0.5rem;
+            margin: 0 1rem 0.5rem 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .api-key-input input {
+            flex: 1;
+            background: #1e1e2a;
+            border: 1px solid #3f3f55;
+            border-radius: 0.5rem;
+            padding: 0.3rem 0.5rem;
+            color: white;
+            font-size: 0.7rem;
         }
     </style>
 </head>
@@ -158,10 +284,10 @@
     <section id="projek" class="py-32 px-6 bg-[#080808]">
         <div class="max-w-7xl mx-auto">
             <h3 class="text-4xl font-black mb-4 italic uppercase tracking-tighter text-center md:text-left">PROJECT <span class="text-brandBlue">SHOWCASE</span></h3>
-            <p class="text-zinc-500 mb-16 text-xs font-mono text-center md:text-left">*Klik pada gambar proyek untuk melihat detail.</p>
+            <p class="text-zinc-500 mb-16 text-xs font-mono text-center md:text-left">*Klik pada gambar proyek untuk melihat detail & galeri.</p>
             
             <div class="project-grid" id="project-container">
-
+                <!-- PROYEK 1: Sistem Inventaris Lab (sudah ada + galeri) -->
                 <div class="project-card glass rounded-[3rem] p-4 flex flex-col md:flex-row gap-6 md:gap-8 group" onclick="expandProject(this)">
                     <div class="img-main w-full h-64 md:h-full rounded-[2.5rem] overflow-hidden flex-shrink-0 transition-all duration-500 relative">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent p-6 md:p-8 flex flex-col justify-end group-[.expanded]:opacity-0 transition-opacity duration-500">
@@ -170,7 +296,6 @@
                         </div>
                         <img src="atim.png" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                     </div>
-                    
                     <div class="details-content flex-1 py-4 md:py-8 md:pr-8 md:border-l border-white/10 md:pl-8">
                         <span class="text-brandPurple font-mono text-[10px] tracking-widest uppercase">Politeknik ATI Makassar</span>
                         <h4 class="text-3xl md:text-4xl font-black mt-4 mb-4 italic uppercase tracking-tighter text-gradient">SIM Inventaris Lab</h4>
@@ -178,13 +303,16 @@
                         <p class="text-zinc-400 text-sm md:text-base leading-relaxed mb-8 italic">
                             Membangun solusi inventaris berbasis web untuk Politeknik ATI Makassar yang mengintegrasikan sistem basis data terpusat guna meminimalisir kesalahan manusia dalam pengelolaan sarana dan prasarana kampus.
                         </p>
-                        <div class="flex flex-wrap gap-4">
+                        <div class="flex flex-wrap gap-4 mb-6">
                             <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandBlue/30 text-brandBlue uppercase">Management</span>
                             <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandPurple/30 text-brandPurple uppercase">Academic</span>
                         </div>
+                        <!-- Galeri foto -->
+                        <div class="gallery-grid" data-gallery='["https://picsum.photos/id/20/400/400", "https://picsum.photos/id/26/400/400", "https://picsum.photos/id/28/400/400"]'></div>
                     </div>
                 </div>
 
+                <!-- PROYEK 2: SIM Profil Desa (sudah ada + galeri) -->
                 <div class="project-card glass rounded-[3rem] p-4 flex flex-col md:flex-row gap-6 md:gap-8 group" onclick="expandProject(this)">
                     <div class="img-main w-full h-64 md:h-full rounded-[2.5rem] overflow-hidden flex-shrink-0 transition-all duration-500 relative">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent p-6 md:p-8 flex flex-col justify-end group-[.expanded]:opacity-0 transition-opacity duration-500">
@@ -193,7 +321,6 @@
                         </div>
                         <img src="desa.PNG" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                     </div>
-                    
                     <div class="details-content flex-1 py-4 md:py-8 md:pr-8 md:border-l border-white/10 md:pl-8">
                         <span class="text-brandBlue font-mono text-[10px] tracking-widest uppercase">Desa Sapanang</span>
                         <h4 class="text-3xl md:text-4xl font-black mt-4 mb-4 italic uppercase tracking-tighter text-gradient">Digital Profile</h4>
@@ -201,13 +328,15 @@
                         <p class="text-zinc-400 text-sm md:text-base leading-relaxed mb-8 italic">
                             Mengembangkan platform profil desa digital untuk Desa Sapanang yang mengintegrasikan pusat informasi publik dan potensi wilayah guna meningkatkan transparansi tata kelola serta memperluas jangkauan promosi.
                         </p>
-                        <div class="flex flex-wrap gap-4">
+                        <div class="flex flex-wrap gap-4 mb-6">
                             <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandBlue/30 text-brandBlue uppercase">Web Dev</span>
                             <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandPurple/30 text-brandPurple uppercase">Public Service</span>
                         </div>
+                        <div class="gallery-grid" data-gallery='["https://picsum.photos/id/104/400/400", "https://picsum.photos/id/169/400/400", "https://picsum.photos/id/15/400/400"]'></div>
                     </div>
                 </div>
 
+                <!-- PROYEK 3: SIM Pesantren (sudah ada + galeri) -->
                 <div class="project-card glass rounded-[3rem] p-4 flex flex-col md:flex-row gap-6 md:gap-8 group" onclick="expandProject(this)">
                     <div class="img-main w-full h-64 md:h-full rounded-[2.5rem] overflow-hidden flex-shrink-0 transition-all duration-500 relative">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent p-6 md:p-8 flex flex-col justify-end group-[.expanded]:opacity-0 transition-opacity duration-500">
@@ -216,7 +345,6 @@
                         </div>
                         <img src="pesantren.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                     </div>
-                    
                     <div class="details-content flex-1 py-4 md:py-8 md:pr-8 md:border-l border-white/10 md:pl-8">
                         <span class="text-brandPurple font-mono text-[10px] tracking-widest uppercase">Nurul Hidayah Sapanang</span>
                         <h4 class="text-3xl md:text-4xl font-black mt-4 mb-4 italic uppercase tracking-tighter text-gradient">Sistem Terpadu</h4>
@@ -224,20 +352,68 @@
                         <p class="text-zinc-400 text-sm md:text-base leading-relaxed mb-8 italic">
                             Membangun sistem informasi manajemen pesantren terpadu untuk Pondok Pesantren Nurul Hidayah Sapanang yang mengonsolidasikan data akademik, administrasi santri, dan tata kelola keuangan dalam satu basis data.
                         </p>
-                        <div class="flex flex-wrap gap-4">
+                        <div class="flex flex-wrap gap-4 mb-6">
                             <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandBlue/30 text-brandBlue uppercase">Management</span>
                             <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandPurple/30 text-brandPurple uppercase">Academic</span>
                         </div>
+                        <div class="gallery-grid" data-gallery='["https://picsum.photos/id/21/400/400", "https://picsum.photos/id/30/400/400", "https://picsum.photos/id/36/400/400"]'></div>
                     </div>
                 </div>
 
+                <!-- PROYEK BARU 4: APK Petshop (Mobile App) -->
+                <div class="project-card glass rounded-[3rem] p-4 flex flex-col md:flex-row gap-6 md:gap-8 group" onclick="expandProject(this)">
+                    <div class="img-main w-full h-64 md:h-full rounded-[2.5rem] overflow-hidden flex-shrink-0 transition-all duration-500 relative">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent p-6 md:p-8 flex flex-col justify-end group-[.expanded]:opacity-0 transition-opacity duration-500">
+                            <span class="text-brandPurple font-mono text-[10px] tracking-widest uppercase mb-2">Mobile App</span>
+                            <h4 class="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-white">APK Petshop</h4>
+                        </div>
+                        <img src="https://picsum.photos/id/237/800/600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    </div>
+                    <div class="details-content flex-1 py-4 md:py-8 md:pr-8 md:border-l border-white/10 md:pl-8">
+                        <span class="text-brandBlue font-mono text-[10px] tracking-widest uppercase">Android / iOS</span>
+                        <h4 class="text-3xl md:text-4xl font-black mt-4 mb-4 italic uppercase tracking-tighter text-gradient">Petshop Management</h4>
+                        <div class="w-16 h-1 bg-brandPurple mb-6 rounded-full"></div>
+                        <p class="text-zinc-400 text-sm md:text-base leading-relaxed mb-8 italic">
+                            Aplikasi mobile untuk manajemen petshop modern: inventaris produk, layanan grooming, pelacakan pelanggan, dan laporan pendapatan real-time. Dibangun dengan Flutter & Firebase.
+                        </p>
+                        <div class="flex flex-wrap gap-4 mb-6">
+                            <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandBlue/30 text-brandBlue uppercase">Flutter</span>
+                            <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandPurple/30 text-brandPurple uppercase">Firebase</span>
+                            <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandBlue/30 text-brandBlue uppercase">Mobile</span>
+                        </div>
+                        <div class="gallery-grid" data-gallery='["https://picsum.photos/id/200/400/400", "https://picsum.photos/id/219/400/400", "https://picsum.photos/id/300/400/400"]'></div>
+                    </div>
+                </div>
+
+                <!-- PROYEK BARU 5: Aplikasi Klinik -->
+                <div class="project-card glass rounded-[3rem] p-4 flex flex-col md:flex-row gap-6 md:gap-8 group" onclick="expandProject(this)">
+                    <div class="img-main w-full h-64 md:h-full rounded-[2.5rem] overflow-hidden flex-shrink-0 transition-all duration-500 relative">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent p-6 md:p-8 flex flex-col justify-end group-[.expanded]:opacity-0 transition-opacity duration-500">
+                            <span class="text-brandBlue font-mono text-[10px] tracking-widest uppercase mb-2">Web App</span>
+                            <h4 class="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-white">Aplikasi Klinik</h4>
+                        </div>
+                        <img src="https://picsum.photos/id/48/800/600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    </div>
+                    <div class="details-content flex-1 py-4 md:py-8 md:pr-8 md:border-l border-white/10 md:pl-8">
+                        <span class="text-brandPurple font-mono text-[10px] tracking-widest uppercase">Sistem Informasi Klinik</span>
+                        <h4 class="text-3xl md:text-4xl font-black mt-4 mb-4 italic uppercase tracking-tighter text-gradient">Clinic Management</h4>
+                        <div class="w-16 h-1 bg-brandBlue mb-6 rounded-full"></div>
+                        <p class="text-zinc-400 text-sm md:text-base leading-relaxed mb-8 italic">
+                            Platform manajemen klinik kesehatan: pendaftaran pasien, rekam medis digital, antrian online, dan laporan statistik. Dibangun dengan Laravel & MySQL.
+                        </p>
+                        <div class="flex flex-wrap gap-4 mb-6">
+                            <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandBlue/30 text-brandBlue uppercase">Laravel</span>
+                            <span class="px-4 py-2 glass rounded-full text-[10px] font-bold border-brandPurple/30 text-brandPurple uppercase">Health Tech</span>
+                        </div>
+                        <div class="gallery-grid" data-gallery='["https://picsum.photos/id/107/400/400", "https://picsum.photos/id/116/400/400", "https://picsum.photos/id/177/400/400"]'></div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <section id="skill" class="py-24 bg-black/30 border-y border-white/5">
         <div class="max-w-6xl mx-auto px-6">
-            
             <div class="mb-24">
                 <h3 class="text-3xl font-black mb-12 italic text-center uppercase tracking-tighter">Technical <span class="text-brandPurple">Capabilities</span></h3>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
@@ -263,7 +439,6 @@
                     </div>
                 </div>
             </div>
-
             <div>
                 <h3 class="text-3xl font-black mb-12 italic text-center uppercase tracking-tighter text-brandBlue">Personal Stats</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -277,7 +452,6 @@
                         </div>
                         <p class="text-[10px] text-zinc-500 mt-4 italic leading-relaxed">Memadukan kemampuan teknis, analisis, dan desain untuk solusi digital inovatif.</p>
                     </div>
-                    
                     <div class="glass p-8 rounded-[2rem] border border-white/5 hover:bg-white/5 transition">
                         <div class="flex justify-between items-center mb-4">
                             <p class="text-zinc-300 text-xs uppercase tracking-widest font-mono italic font-bold">Problem Solving</p>
@@ -297,21 +471,43 @@
         <div class="max-w-4xl mx-auto">
             <h3 class="text-5xl md:text-6xl font-black mb-6 italic uppercase tracking-tighter">Say <span class="text-brandBlue">Hello.</span></h3>
             <p class="text-zinc-400 mb-12 italic">"Saya terbuka untuk peluang kerja, kolaborasi, dan pengembangan proyek teknologi."</p>
-            
             <div class="flex flex-wrap justify-center gap-8 text-sm font-mono bg-white/5 inline-flex p-6 rounded-[2rem] border border-white/5">
                 <a href="mailto:miqrarh41@gmail.com" class="hover:text-brandBlue transition flex items-center gap-2"><i class="fa-solid fa-envelope text-brandBlue"></i> miqrarh41@gmail.com</a>
                 <a href="tel:+6282187054665" class="hover:text-brandPurple transition flex items-center gap-2"><i class="fa-solid fa-phone text-brandPurple"></i> +62 821 8705 4665</a>
                 <a href="https://www.linkedin.com/in/muh-iqra-ramadhan-h-1a0257367" target="_blank" class="hover:text-brandBlue transition flex items-center gap-2"><i class="fa-brands fa-linkedin text-brandBlue"></i> LinkedIn</a>
             </div>
-            
             <div class="mt-20 text-[10px] font-mono uppercase tracking-[0.3em] text-zinc-600">
                 Design & Code by Muh. Iqra Ramadhan Hidayat &copy; 2026
             </div>
         </div>
     </footer>
 
+    <!-- Chat AI Modal (Gemini API) -->
+    <div class="chat-modal">
+        <div class="chat-button" id="chatButton">
+            <i class="fa-regular fa-message text-2xl text-white"></i>
+        </div>
+        <div id="chatWindow" class="chat-window hidden">
+            <div class="chat-header">
+                <span><i class="fa-regular fa-comment-dots text-brandBlue"></i> AI Assistant</span>
+                <i class="fa-solid fa-xmark cursor-pointer" id="closeChat"></i>
+            </div>
+            <div class="api-key-input">
+                <input type="text" id="geminiKey" placeholder="Masukkan Gemini API Key (dapatkan di aistudio.google.com)" style="flex:1">
+                <button id="saveKeyBtn" class="text-xs bg-brandPurple px-2 rounded">Simpan</button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message ai-message">Halo! Saya asisten AI. Silakan masukkan API Key Gemini di atas lalu tanyakan apa saja 😊</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Tanyakan sesuatu...">
+                <button id="sendChat">Kirim</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // 1. Script Efek Asap (Mouse Follower)
+        // 1. Efek Asap
         const canvas = document.getElementById('smoke-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -325,66 +521,113 @@
 
         class Particle {
             constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.size = Math.random() * 15 + 5;
-                this.speedX = Math.random() * 2 - 1;
-                this.speedY = Math.random() * -2 - 1;
+                this.x = x; this.y = y; this.size = Math.random() * 15 + 5;
+                this.speedX = Math.random() * 2 - 1; this.speedY = Math.random() * -2 - 1;
                 this.color = Math.random() > 0.5 ? 'rgba(157, 78, 221, 0.2)' : 'rgba(0, 210, 255, 0.2)';
                 this.alpha = 1;
             }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.alpha > 0.01) this.alpha -= 0.015;
-            }
-            draw() {
-                ctx.globalAlpha = this.alpha;
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
+            update() { this.x += this.speedX; this.y += this.speedY; if (this.alpha > 0.01) this.alpha -= 0.015; }
+            draw() { ctx.globalAlpha = this.alpha; ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
         }
-
-        window.addEventListener('mousemove', (e) => {
-            for (let i = 0; i < 2; i++) {
-                particles.push(new Particle(e.x, e.y));
-            }
-        });
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-                if (particles[i].alpha <= 0.01) {
-                    particles.splice(i, 1);
-                    i--;
-                }
-            }
-            requestAnimationFrame(animate);
-        }
+        window.addEventListener('mousemove', (e) => { for (let i = 0; i < 2; i++) particles.push(new Particle(e.x, e.y)); });
+        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); for (let i = 0; i < particles.length; i++) { particles[i].update(); particles[i].draw(); if (particles[i].alpha <= 0.01) { particles.splice(i,1); i--; } } requestAnimationFrame(animate); }
         animate();
 
-        // 2. Script Project Expansion (Tanpa Pop-up Modal)
+        // 2. Project Expansion (tanpa modal)
         function expandProject(clickedCard) {
             const isExpanded = clickedCard.classList.contains('expanded');
-            
-            // Tutup semua card yang terbuka
-            document.querySelectorAll('.project-card').forEach(card => {
-                card.classList.remove('expanded');
-            });
-            
-            // Jika card yang diklik sebelumnya tidak terbuka, buka card tersebut
+            document.querySelectorAll('.project-card').forEach(card => card.classList.remove('expanded'));
             if (!isExpanded) {
                 clickedCard.classList.add('expanded');
-                // Scroll ke kartu yang aktif agar terlihat penuh di layar (Opsional)
-                setTimeout(() => {
-                    clickedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 300);
+                setTimeout(() => clickedCard.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+                // Render galeri setelah expand (jika belum dirender)
+                renderGalleryForCard(clickedCard);
             }
         }
+
+        // Fungsi untuk membuat galeri dari data-gallery
+        function renderGalleryForCard(card) {
+            const galleryDiv = card.querySelector('.gallery-grid');
+            if (!galleryDiv || galleryDiv.hasAttribute('data-rendered')) return;
+            const imagesSrc = galleryDiv.getAttribute('data-gallery');
+            if (!imagesSrc) return;
+            try {
+                const images = JSON.parse(imagesSrc);
+                galleryDiv.innerHTML = '';
+                images.forEach(src => {
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.className = 'gallery-img';
+                    img.addEventListener('click', (e) => { e.stopPropagation(); window.open(src, '_blank'); });
+                    galleryDiv.appendChild(img);
+                });
+                galleryDiv.setAttribute('data-rendered', 'true');
+            } catch(e) { console.warn(e); }
+        }
+        // Render galeri untuk semua card yang mungkin sudah ada (pada load)
+        document.querySelectorAll('.project-card').forEach(card => renderGalleryForCard(card));
+
+        // 3. Chat AI dengan Gemini API (butuh API Key)
+        const chatButton = document.getElementById('chatButton');
+        const chatWindow = document.getElementById('chatWindow');
+        const closeChat = document.getElementById('closeChat');
+        const sendBtn = document.getElementById('sendChat');
+        const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.getElementById('chatMessages');
+        const geminiKeyInput = document.getElementById('geminiKey');
+        const saveKeyBtn = document.getElementById('saveKeyBtn');
+
+        let geminiApiKey = localStorage.getItem('gemini_api_key') || '';
+        if(geminiApiKey) geminiKeyInput.value = geminiApiKey;
+
+        saveKeyBtn.addEventListener('click', () => {
+            geminiApiKey = geminiKeyInput.value.trim();
+            localStorage.setItem('gemini_api_key', geminiApiKey);
+            addMessage('ai', 'API Key tersimpan! Sekarang kamu bisa bertanya.');
+        });
+
+        chatButton.addEventListener('click', () => chatWindow.classList.toggle('hidden'));
+        closeChat.addEventListener('click', () => chatWindow.classList.add('hidden'));
+
+        function addMessage(sender, text) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${sender === 'user' ? 'user-message' : 'ai-message'}`;
+            msgDiv.textContent = text;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function sendToGemini(prompt) {
+            if (!geminiApiKey) {
+                addMessage('ai', '⚠️ Silakan masukkan API Key Gemini terlebih dahulu (dapatkan di aistudio.google.com).');
+                return null;
+            }
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`;
+            const body = { contents: [{ parts: [{ text: prompt }] }] };
+            try {
+                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+                const data = await response.json();
+                if (data.error) throw new Error(data.error.message);
+                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Maaf, tidak ada respons.';
+                return reply;
+            } catch (err) {
+                console.error(err);
+                return `Error: ${err.message}. Pastikan API key valid dan kuota mencukupi.`;
+            }
+        }
+
+        sendBtn.addEventListener('click', async () => {
+            const question = chatInput.value.trim();
+            if (!question) return;
+            addMessage('user', question);
+            chatInput.value = '';
+            addMessage('ai', '⏳ Mengetik...');
+            const lastMsg = chatMessages.lastChild;
+            const reply = await sendToGemini(question);
+            lastMsg.remove();
+            addMessage('ai', reply);
+        });
+        chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendBtn.click(); });
     </script>
 </body>
 </html>
